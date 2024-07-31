@@ -1,37 +1,49 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Header from "../components/common/Header";
 import Footer from "../components/common/Footer";
 import { MarkdownEditor } from "../components/MarkdownEditor";
 import styled from "styled-components";
 import axios from "axios";
-import DownloadVideo from "../components/DownloadVideo";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
   const [markdown, setMarkdown] = useState("");
   const [videoUrl, setVideoUrl] = useState("");
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const navigate = useNavigate();
+
   const handleFetchVideo = async () => {
-    setLoading(true);
     try {
-      console.log(markdown);
+      setLoading(true);
       const response = await axios.post(
-        "http://61.254.228.107:1207/markdown",
-        { requestData: markdown }, // 서버가 기대하는 데이터 형식
+        `http://61.254.228.107:1207/markdown`,
+        markdown,
         {
-          responseType: "blob", // 서버가 비디오 파일을 Blob 형식으로 반환한다고 가정
-          headers: {
-            "Content-Type": "text/plain", // 요청 데이터 형식
-          },
+          responseType: "blob", // 영상 데이터를 받아올 때 사용
         }
       );
-      const videoBlob = new Blob([response.data], { type: "video/mp4" });
-      const videoUrl = URL.createObjectURL(videoBlob);
-      setVideoUrl(videoUrl);
-    } catch (error) {
-      console.error("Error fetching video:", error);
-    } finally {
+
+      const url = URL.createObjectURL(new Blob([response.data]));
+      setVideoUrl(url);
       setLoading(false);
+
+      navigate("/done", {
+        state: { videoUrl: url, error: error },
+      });
+    } catch (error) {
+      setLoading(false);
+      if (error.response) {
+        console.error("Error response:", error.response.data);
+        setError(`Error: ${error.response.status} - ${error.response.data}`);
+      } else if (error.request) {
+        console.error("Error request:", error.request);
+        setError("Error: No response received from server");
+      } else {
+        console.error("Error message:", error.message);
+        setError(`Error: ${error.message}`);
+      }
     }
   };
 
@@ -44,14 +56,9 @@ const Home = () => {
         <Button onClick={handleFetchVideo} disabled={loading}>
           {loading ? "Loading..." : "비디오 만들기"}
         </Button>
-        {videoUrl && (
-          <video controls>
-            <source src={videoUrl} type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
-        )}
-        <DownloadVideo markdown={markdown} />
       </HomeDiv>
+
+      {error && <div style={{ color: "red" }}>{error}</div>}
       <Footer />
     </div>
   );

@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import { MdOutlineChangeCircle } from "react-icons/md";
 import { Link } from "react-router-dom";
 
 const Main = () => {
