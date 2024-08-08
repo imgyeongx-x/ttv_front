@@ -18,11 +18,10 @@ const Done = () => {
         <Text>다운로드가 완료되었습니다.</Text>
         {videoUrl && (
           <div>
-            <h2>Generated Video:</h2>
-            <video controls>
+            <Video controls>
               <source src={videoUrl} type="video/mp4" />
               Your browser does not support the video tag.
-            </video>
+            </Video>
           </div>
         )}
         {error && <ErrorText>{error}</ErrorText>}
@@ -48,6 +47,13 @@ const Text = styled.div`
 const ErrorText = styled.div`
   color: red;
   margin-top: 20px;
+`;
+
+const Video = styled.video`
+  width: 100%; /* 비디오의 너비를 화면의 80%로 설정 */
+  max-width: 800px; /* 비디오의 최대 너비를 800px로 설정 */
+  height: auto; /* 비디오의 높이는 자동 조정 */
+  margin-top: 10px;
 `;
 
 export default Done;

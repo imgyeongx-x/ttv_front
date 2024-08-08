@@ -5,12 +5,20 @@ import { MarkdownEditor } from "../components/MarkdownEditor";
 import styled from "styled-components";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { DropdownForm } from "../components/DropdownForm";
 
 const Home = () => {
   const [markdown, setMarkdown] = useState("");
   const [videoUrl, setVideoUrl] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const [size, setSize] = useState();
+  const [type, setType] = useState();
+  const [velocity, setVelocity] = useState();
+  const [font, setFont] = useState();
+  const [fontSize, setFontSize] = useState();
+  const [color, setColor] = useState();
 
   const navigate = useNavigate();
 
@@ -52,6 +60,20 @@ const Home = () => {
       <Header />
       <HomeDiv>
         <Title>[ 마크다운 작성 ]</Title>
+        <DropdownForm
+          size={size}
+          setSize={setSize}
+          type={type}
+          setType={setType}
+          velocity={velocity}
+          setVelocity={setVelocity}
+          font={font}
+          setFont={setFont}
+          color={color}
+          setColor={setColor}
+          fontSize={fontSize}
+          setFontSize={setFontSize}
+        />
         <MarkdownEditor markdown={markdown} setMarkdown={setMarkdown} />
         <Button onClick={handleFetchVideo} disabled={loading}>
           {loading ? "Loading..." : "비디오 만들기"}
