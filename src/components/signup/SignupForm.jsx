@@ -7,12 +7,15 @@ export const SignupForm = () => {
   const [id, setId] = useState("");
   const [pw, setPw] = useState("");
   const [pwCheck, setPwCheck] = useState("");
+  const [idAvailable, setIdAvailable] = useState(true); // To track ID availability
+  const [error, setError] = useState(""); // To show error messages
 
   const onChangeName = (e) => {
     setName(e.target.value);
   };
   const onChangeId = (e) => {
     setId(e.target.value);
+    setIdAvailable(true); // Reset ID availability when ID is changed
   };
   const onChangePw = (e) => {
     setPw(e.target.value);
@@ -26,15 +29,45 @@ export const SignupForm = () => {
   const onSubmit = async (e) => {
     e.preventDefault();
 
-    await axios
-      .post(baseUrl + "/signup/success", {
+    // Check if passwords match
+    if (pw !== pwCheck) {
+      setError("비밀번호가 일치하지 않습니다.");
+      return;
+    }
+
+    // Check if ID is available
+    if (!idAvailable) {
+      setError("아이디가 이미 사용 중입니다.");
+      return;
+    }
+
+    try {
+      await axios.post(baseUrl + "signup/success", {
         name: name,
         id: id,
         password: pw,
-      })
-      .catch((err) => {
-        console.log(err);
       });
+      // Redirect or show success message here
+    } catch (err) {
+      setError("회원가입에 실패했습니다. 다시 시도해주세요.");
+      console.log(err);
+    }
+  };
+
+  const checkIdDuplicate = async () => {
+    try {
+      const response = await axios.post(baseUrl + "signup/check-id", { id });
+      if (response.data.available) {
+        setIdAvailable(true);
+        setError(""); // Clear any previous error
+      } else {
+        setIdAvailable(false);
+        setError("이미 사용 중인 아이디입니다.");
+      }
+    } catch (err) {
+      setError("ID 중복 확인에 실패했습니다. 다시 시도해주세요.");
+      console.log(err);
+    }
   };
 
   return (
@@ -54,7 +87,7 @@ export const SignupForm = () => {
           onChange={onChangeId}
           placeholder="아이디를 입력하세요"
         />
-        <SmallButton>중복확인</SmallButton>
+        <SmallButton onClick={checkIdDuplicate}>중복확인</SmallButton>
       </Group>
       <Group>
         <Label>비밀번호</Label>
@@ -74,6 +107,7 @@ export const SignupForm = () => {
           type="password"
         />
       </Group>
+      {error && <ErrorText>{error}</ErrorText>}
       <Button onClick={onSubmit}>회원가입</Button>
     </Form>
   );
@@ -134,4 +168,10 @@ const SmallButton = styled.button`
   border-radius: 10px;
   font-family: "IBM Plex Sans KR", sans-serif;
   color: white;
+`;
+
+const ErrorText = styled.div`
+  color: red;
+  margin-top: 10px;
+  font-size: 14px;
 `;
