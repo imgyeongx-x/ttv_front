@@ -26,8 +26,16 @@ const Home = () => {
     try {
       setLoading(true);
       const response = await axios.post(
-        `http://61.254.228.107:1207/markdown`,
-        markdown,
+        `http://61.254.228.107:1222/markdown`,
+        {
+          markdown: markdown,
+          size: size,
+          type: type,
+          velocity: velocity,
+          font: font,
+          fontSize: fontSize,
+          color: color,
+        },
         {
           responseType: "blob", // 영상 데이터를 받아올 때 사용
         }

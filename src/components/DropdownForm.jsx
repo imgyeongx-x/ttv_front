@@ -97,6 +97,7 @@ const SelectDiv = styled.div`
   flex-direction: row;
   background-color: #24146810;
   border-radius: 15px;
+  padding: 5px;
 `;
 
 const DropDownForm = styled.div`
