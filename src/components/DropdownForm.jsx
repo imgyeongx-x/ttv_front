@@ -2,18 +2,16 @@ import React from "react";
 import styled from "styled-components";
 
 export const DropdownForm = ({
-  size,
-  setSize,
+  size_x,
+  setSize_x,
+  size_y,
+  setSize_y,
   type,
   setType,
   velocity,
   setVelocity,
   font,
   setFont,
-  color,
-  setColor,
-  fontSize,
-  setFontSize,
 }) => {
   return (
     <DropDownForm>
@@ -22,7 +20,12 @@ export const DropdownForm = ({
       <SelectDiv>
         <SelectWrapper>
           <Label>Size</Label>
-          <Select value={size} onChange={(e) => setSize(e.target.value)}>
+          <Select value={size_x} onChange={(e) => setSize_x(e.target.value)}>
+            <option value="small">Small</option>
+            <option value="medium">Medium</option>
+            <option value="large">Large</option>
+          </Select>
+          <Select value={size_y} onChange={(e) => setSize_y(e.target.value)}>
             <option value="small">Small</option>
             <option value="medium">Medium</option>
             <option value="large">Large</option>
@@ -58,27 +61,6 @@ export const DropdownForm = ({
             <option value="v10">1</option>
             <option value="v15">1.5</option>
             <option value="v20">2.0</option>
-          </Select>
-        </SelectWrapper>
-
-        <SelectWrapper>
-          <Label>Color</Label>
-          <Select value={color} onChange={(e) => setColor(e.target.value)}>
-            <option value="black">Black</option>
-            <option value="red">Red</option>
-            <option value="blue">Blue</option>
-          </Select>
-        </SelectWrapper>
-
-        <SelectWrapper>
-          <Label>Font Size</Label>
-          <Select
-            value={fontSize}
-            onChange={(e) => setFontSize(e.target.value)}
-          >
-            <option value="12px">12px</option>
-            <option value="16px">16px</option>
-            <option value="20px">20px</option>
           </Select>
         </SelectWrapper>
       </SelectDiv>

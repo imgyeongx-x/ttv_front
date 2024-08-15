@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useState } from "react";
 import styled from "styled-components";
 
@@ -18,6 +19,22 @@ export const SignupForm = () => {
   };
   const onChangePwCheck = (e) => {
     setPwCheck(e.target.value);
+  };
+
+  const baseUrl = "https://localhost:8080/";
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+
+    await axios
+      .post(baseUrl + "/signup/success", {
+        name: name,
+        id: id,
+        password: pw,
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
@@ -57,7 +74,7 @@ export const SignupForm = () => {
           type="password"
         />
       </Group>
-      <Button>회원가입</Button>
+      <Button onClick={onSubmit}>회원가입</Button>
     </Form>
   );
 };

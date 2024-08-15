@@ -30,7 +30,7 @@ const AdDiv = styled.div`
 const AD = styled.div`
   background-color: gray;
   width: 550px;
-  heignt: 200px;
+  height: 200px;
   color: gray;
   margin: 30px;
 `;

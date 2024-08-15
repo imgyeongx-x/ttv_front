@@ -13,7 +13,8 @@ const Home = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const [size, setSize] = useState();
+  const [size_x, setSize_x] = useState();
+  const [size_y, setSize_y] = useState();
   const [type, setType] = useState();
   const [velocity, setVelocity] = useState();
   const [font, setFont] = useState();
@@ -28,13 +29,11 @@ const Home = () => {
       const response = await axios.post(
         `http://61.254.228.107:1222/markdown`,
         {
-          markdown: markdown,
-          size: size,
-          type: type,
-          velocity: velocity,
-          font: font,
-          fontSize: fontSize,
-          color: color,
+          text: markdown,
+          video_size: [size_x, size_y],
+          tts_type: type,
+          tts_speed: velocity,
+          font_path: font,
         },
         {
           responseType: "blob", // 영상 데이터를 받아올 때 사용
@@ -69,18 +68,16 @@ const Home = () => {
       <HomeDiv>
         <Title>[ 마크다운 작성 ]</Title>
         <DropdownForm
-          size={size}
-          setSize={setSize}
+          size_x={size_x}
+          setSize_x={setSize_x}
+          size_y={size_y}
+          setSize_y={setSize_y}
           type={type}
           setType={setType}
           velocity={velocity}
           setVelocity={setVelocity}
           font={font}
           setFont={setFont}
-          color={color}
-          setColor={setColor}
-          fontSize={fontSize}
-          setFontSize={setFontSize}
         />
         <MarkdownEditor markdown={markdown} setMarkdown={setMarkdown} />
         <Button onClick={handleFetchVideo} disabled={loading}>
