@@ -13,6 +13,28 @@ export const LoginForm = () => {
     setPw(e.target.value);
   };
 
+  const baseUrl = "http://localhost:8080/";
+  try {
+    const response = await axios.post(
+      baseUrl + "login/success",
+      {
+        userId: id,
+        password: pw,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    console.log(response);
+    // Redirect or show success message here
+  } catch (err) {
+    setError("로그인 실패했습니다. 다시 시도해주세요.");
+    console.log(err);
+  }
+};
+
   return (
     <Form>
       <Title>
