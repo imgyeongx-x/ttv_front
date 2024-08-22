@@ -12,7 +12,7 @@ export const SignupForm = () => {
 
   const onChangeName = (e) => {
     setName(e.target.value);
-  };
+  };``
   const onChangeId = (e) => {
     setId(e.target.value);
     setIdAvailable(true); // Reset ID availability when ID is changed
@@ -24,7 +24,7 @@ export const SignupForm = () => {
     setPwCheck(e.target.value);
   };
 
-  const baseUrl = "https://localhost:8080/";
+  const baseUrl = "http://localhost:8080/";
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -42,16 +42,24 @@ export const SignupForm = () => {
     }
 
     try {
-      await axios.post(baseUrl + "signup/success", {
-        name: name,
-        id: id,
-        password: pw,
+      const response = await axios.post(baseUrl + "signup/success", {
+        "userId": id,
+        "userName": name,
+        "password": pw,
+      }, {
+        headers: {
+              'Content-Type': 'application/json'
+        }
       });
+      console.log(response);
       // Redirect or show success message here
     } catch (err) {
       setError("회원가입에 실패했습니다. 다시 시도해주세요.");
       console.log(err);
     }
+    /* finally {
+        console.log("함수 동작 완료")
+    } */
   };
 
   const checkIdDuplicate = async () => {
