@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { PiWall } from "react-icons/pi";
+import axios from "axios";
 import styled from "styled-components";
 
 export const LoginForm = () => {
   const [id, setId] = useState("");
   const [pw, setPw] = useState("");
+  const [error, setError] = useState("");
 
   const onChangeId = (e) => {
     setId(e.target.value);
@@ -14,29 +15,32 @@ export const LoginForm = () => {
   };
 
   const baseUrl = "http://localhost:8080/";
-  try {
-    const response = await axios.post(
-      baseUrl + "login/success",
-      {
-        userId: id,
-        password: pw,
-      },
-      {
-        headers: {
-          "Content-Type": "application/json",
+
+  const onSubmit = async (e) => {
+    e.preventDefault(); // Prevent the default form submission
+    try {
+      const response = await axios.post(
+        baseUrl + "login/success",
+        {
+          userId: id,
+          password: pw,
         },
-      }
-    );
-    console.log(response);
-    // Redirect or show success message here
-  } catch (err) {
-    setError("로그인 실패했습니다. 다시 시도해주세요.");
-    console.log(err);
-  }
-};
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log(response);
+      // Redirect or show success message here
+    } catch (err) {
+      setError("로그인 실패했습니다. 다시 시도해주세요.");
+      console.log(err);
+    }
+  };
 
   return (
-    <Form>
+    <Form onSubmit={onSubmit}>
       <Title>
         <p>로그인</p>
       </Title>
@@ -53,11 +57,12 @@ export const LoginForm = () => {
         <InputDiv
           value={pw}
           onChange={onChangePw}
-          placeholder="비밀번호를입력하세요"
+          placeholder="비밀번호를 입력하세요"
           type="password"
         />
       </Group>
-      <Button>로그인</Button>
+      {error && <ErrorText>{error}</ErrorText>}
+      <Button type="submit">로그인</Button>
     </Form>
   );
 };
