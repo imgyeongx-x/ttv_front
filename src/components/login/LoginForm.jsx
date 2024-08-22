@@ -1,4 +1,3 @@
-import axios from "axios";
 import React, { useState } from "react";
 import { PiWall } from "react-icons/pi";
 import styled from "styled-components";
@@ -13,7 +12,6 @@ export const LoginForm = () => {
   const onChangePw = (e) => {
     setPw(e.target.value);
   };
-
 
   return (
     <Form>
